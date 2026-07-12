@@ -9,7 +9,8 @@ Guide de demarrage local et de deploiement Docker avec Neon.
 - API: routes serveur sous `/api`
 - Base de donnees: Neon PostgreSQL via `DATABASE_URL`
 - Media: Cloudinary
-- CI/CD: GitHub Actions + Docker Hub
+- Deploiement recommande: Coolify + GitHub App
+- CI/CD alternatif: GitHub Actions + Docker Hub
 
 ## Prerequis
 
@@ -76,6 +77,55 @@ docker-compose down
 ```
 
 Le conteneur charge les variables depuis `.env`.
+
+## Deploiement Coolify
+
+La methode recommandee pour ce projet est **Coolify + GitHub App**, sans dependre de GitHub Actions.
+
+### Pourquoi ce choix
+
+- Coolify supporte le deploiement automatique depuis GitHub via **GitHub App**
+- Coolify peut builder directement un projet a partir de notre **Dockerfile**
+- les variables d'environnement peuvent etre gerees directement dans l'interface Coolify
+
+### Configuration recommandee dans Coolify
+
+1. Creer l'application dans Coolify depuis le repository GitHub
+2. Choisir **Private Repository (GitHub App)** si le repo est prive
+3. Choisir le build pack **Dockerfile**
+4. Utiliser la branche `main`
+5. Utiliser la racine du projet `/`
+6. Configurer le port applicatif a `8080`
+7. Ajouter les variables d'environnement dans Coolify:
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=...
+ADMIN_SETUP_KEY=...
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+CLOUDINARY_FOLDER=...
+NODE_ENV=production
+SEED_DEMO_DATA=false
+PORT=8080
+```
+
+8. Pour eviter les erreurs de build dans Coolify, mettre ces variables en **Runtime only** et non en **Available at Buildtime**:
+
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `ADMIN_SETUP_KEY`
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `CLOUDINARY_FOLDER`
+- `NODE_ENV`
+- `SEED_DEMO_DATA`
+
+### Auto deploy
+
+Une fois la GitHub App connectee, activer **Auto Deploy** dans Coolify pour declencher un redeploiement a chaque push sur `main`.
 
 ## Premier compte admin
 

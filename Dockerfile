@@ -3,7 +3,9 @@ FROM node:22.12.0-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+# Coolify may pass NODE_ENV=production as a build-time variable.
+# Force full dependency install here so Vite/TypeScript build tooling is available.
+RUN NODE_ENV=development npm ci --include=dev --no-audit --no-fund
 
 FROM node:22.12.0-alpine AS builder
 
@@ -12,7 +14,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run build
+RUN NODE_ENV=development npm run build
 
 FROM node:22.12.0-alpine AS runner
 
@@ -25,6 +27,8 @@ COPY package.json package-lock.json ./
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY server.mjs ./server.mjs
+
+RUN npm prune --omit=dev --no-audit --no-fund
 
 EXPOSE 8080
 
