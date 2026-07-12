@@ -9,7 +9,7 @@ Guide de demarrage local et de deploiement Docker avec Neon.
 - API: routes serveur sous `/api`
 - Base de donnees: Neon PostgreSQL via `DATABASE_URL`
 - Media: Cloudinary
-- CI/CD: GitHub Actions + Docker Hub + redeploy Coolify optionnel
+- CI/CD: GitHub Actions + Docker Hub
 
 ## Prerequis
 
@@ -97,21 +97,16 @@ Le pipeline GitHub est dans [.github/workflows/build-and-push.yml](/home/dialiba
 
 - build et push l'image Docker sur `main`, `develop` et les releases
 - publie sur Docker Hub
-- peut redeployer Coolify si les secrets requis sont presents
 
 Secrets GitHub attendus:
 
 - `DATABASE_URL`
 - `DOCKER_USERNAME`
 - `DOCKER_TOKEN`
-- `COOLIFY_TOKEN`
-- `COOLIFY_DEPLOY_URL`
 
 Variable GitHub optionnelle:
 
 - `DOCKER_IMAGE_NAME`
-
-Si `COOLIFY_DEPLOY_URL` ou `COOLIFY_TOKEN` ne sont pas encore definis, le step de redeploy est simplement ignore. C'est adapte a ton cas tant que l'instance Coolify n'est pas creee.
 
 ## Commandes utiles
 
