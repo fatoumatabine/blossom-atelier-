@@ -101,6 +101,7 @@ Le pipeline GitHub est dans [.github/workflows/build-and-push.yml](/home/dialiba
 
 Secrets GitHub attendus:
 
+- `DATABASE_URL`
 - `DOCKER_USERNAME`
 - `DOCKER_TOKEN`
 - `COOLIFY_TOKEN`
